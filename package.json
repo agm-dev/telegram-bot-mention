@@ -1,0 +1,30 @@
+{
+  "name": "telegram-bot-mention",
+  "version": "1.0.0",
+  "description": "Telegram bot that helps to mention everyone in a group",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agm-dev/telegram-bot-mention.git"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "javascript",
+    "telegraf"
+  ],
+  "author": "Adrián Gonzalo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/agm-dev/telegram-bot-mention/issues"
+  },
+  "homepage": "https://github.com/agm-dev/telegram-bot-mention#readme",
+  "dependencies": {
+    "dotenv-safe": "^8.2.0",
+    "telegraf": "^3.36.0"
+  }
+}
