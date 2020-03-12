@@ -1,7 +1,6 @@
 const fs = require('fs');
+const { SAVE_FILE } = require('./vars');
 const { log } = require('./utils');
-
-const SAVE_FILE = 'saved_data.json';
 
 const state = {
   groups: {}

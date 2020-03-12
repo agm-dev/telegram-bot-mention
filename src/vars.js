@@ -5,6 +5,11 @@ require('dotenv-safe').config({
   path: join(__dirname, '..', '.env'),
 });
 
-const config = { BOT_TOKEN } = process.env;
+const { BOT_TOKEN } = process.env;
 
-module.exports = config;
+const SAVE_FILE = join(__dirname, '..', 'saved_data.json');
+
+module.exports = {
+  BOT_TOKEN,
+  SAVE_FILE,
+};
