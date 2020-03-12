@@ -8,7 +8,13 @@ const {
 } = require('./utils');
 const state = require('./state');
 
-exports.catchErrors = fn => (...params) => fn(...params).catch(err => console.error('ERROR: ', err));
+exports.catchErrors = fn => (...params) => {
+  try {
+    fn(...params)
+  } catch(err) {
+    console.error('ERROR: ', err)
+  }
+}
 
 exports.initGroup = async ctx => {
   const { chatId, type } = getVarsFromContext(ctx);
@@ -76,7 +82,14 @@ exports.mentionAllHandler = (ctx) => {
     return;
   }
 
-  if (!existsGroupSavedData(groupKey, state) || stillNoSavedMembers(groupKey, state)) {
+  if (!existsGroupSavedData(groupKey, state)) {
+    const msg = 'El grupo no ha sido inicializado';
+    console.log(msg, chatId);
+    ctx.reply(msg);
+    return;
+  }
+
+  if (stillNoSavedMembers(groupKey, state)) {
     const msg = 'No hay información almacenada sobre los miembros de este grupo';
     console.log(msg, chatId);
     ctx.reply(msg);
