@@ -1,3 +1,10 @@
+const getDateMark = () => `[${(new Date()).toISOString()}]`
+
+exports.log = {
+  info: (t, ...params) => console.log(`${getDateMark()}[INFO] ${t}`, ...params),
+  error: (t, ...params) => console.error(`${getDateMark()}[ERROR] ${t}`, ...params)
+}
+
 exports.getVarsFromContext = ctx => {
   const { chat, from } = ctx;
   return {

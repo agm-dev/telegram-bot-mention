@@ -1,6 +1,7 @@
 const bot = require('./src/bot');
 const { loadState } = require('./src/state');
+const { log } = require('./src/utils');
 
 loadState();
 bot.launch();
-console.log('launched bot');
+log.info('launched bot');

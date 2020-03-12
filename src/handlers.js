@@ -7,23 +7,24 @@ const {
   getGroupData,
 } = require('./utils');
 const { state, saveState } = require('./state');
+const { log } = require('./utils');
 
 exports.catchErrors = fn => (...params) => {
   try {
     fn(...params)
   } catch(err) {
-    console.error('ERROR: ', err)
+    log.error('ERROR: ', err)
   }
 }
 
 exports.initGroup = async ctx => {
   const { chatId, type } = getVarsFromContext(ctx);
   const groupKey = getGroupId(chatId);
-  console.log('initGroup()', chatId);
+  log.info('initGroup()', chatId);
 
   if (!isGroup(type) || existsGroupSavedData(groupKey, state)) {
     const msg = 'Este grupo ya ha sido inicializado';
-    console.log(msg, chatId);
+    log.info(msg, chatId);
     ctx.reply(msg);
     return
   }
@@ -31,7 +32,7 @@ exports.initGroup = async ctx => {
   const totalMembers = await ctx.telegram.getChatMembersCount(chatId);
 
   state.groups[groupKey] = { totalMembers, members: [] };
-  console.log(`Inicializado nuevo grupo con id ${chatId} y ${totalMembers} usuarios`);
+  log.info(`Inicializado nuevo grupo con id ${chatId} y ${totalMembers} usuarios`);
 
   saveState();
   ctx.reply('El grupo ha sido inicializado');
@@ -40,36 +41,36 @@ exports.initGroup = async ctx => {
 exports.messageHandler = ctx => {
   const { chatId, type, userId, username } = getVarsFromContext(ctx);
   const groupKey = getGroupId(chatId);
-  console.log(`messageHandler() on chat ${chatId} from user ${userId}`);
+  log.info(`messageHandler() on chat ${chatId} from user ${userId}`);
 
   if (!isGroup(type)) {
-    console.log('Este comando sólo funciona en grupos', type);
+    log.info('Este comando sólo funciona en grupos', type);
     return;
   }
 
   if (!existsGroupSavedData(groupKey, state)) {
-    console.log('El grupo no ha sido inicializado', chatId);
+    log.info('El grupo no ha sido inicializado', chatId);
     return;
   }
 
   if (!username) {
-    console.log(`El usuario ${userId} no tiene establecido un nick`, username);
+    log.info(`El usuario ${userId} no tiene establecido un nick`, username);
     return;
   }
 
   const { totalMembers, members } = getGroupData(groupKey, state);
   if (members.length >= totalMembers) {
-    console.log('Ya tengo todos los datos sobre usuarios del chat', chatId);
+    log.info('Ya tengo todos los datos sobre usuarios del chat', chatId);
     return;
   }
 
   if (members.includes(username)) {
-    console.log(`El usuario ${username} ya está almacenado en el chat ${chatId}`);
+    log.info(`El usuario ${username} ya está almacenado en el chat ${chatId}`);
     return;
   }
 
   state.groups[groupKey].members.push(username);
-  console.log(`El usuario ${username} ha sido añadido al chat ${chatId}`);
+  log.info(`El usuario ${username} ha sido añadido al chat ${chatId}`);
 
   saveState();
 }
@@ -77,25 +78,25 @@ exports.messageHandler = ctx => {
 exports.mentionAllHandler = (ctx) => {
   const { chatId, type } = getVarsFromContext(ctx);
   const groupKey = getGroupId(chatId);
-  console.log('mentionAllHandler()', chatId);
+  log.info('mentionAllHandler()', chatId);
 
   if (!isGroup(type)) {
     const msg = 'Este comando sólo funciona en grupos';
-    console.log(msg, type);
+    log.info(msg, type);
     ctx.reply(msg);
     return;
   }
 
   if (!existsGroupSavedData(groupKey, state)) {
     const msg = 'El grupo no ha sido inicializado';
-    console.log(msg, chatId);
+    log.info(msg, chatId);
     ctx.reply(msg);
     return;
   }
 
   if (stillNoSavedMembers(groupKey, state)) {
     const msg = 'No hay información almacenada sobre los miembros de este grupo';
-    console.log(msg, chatId);
+    log.info(msg, chatId);
     ctx.reply(msg);
     return;
   }
