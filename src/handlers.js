@@ -6,7 +6,7 @@ const {
   stillNoSavedMembers,
   getGroupData,
 } = require('./utils');
-const state = require('./state');
+const { state, saveState } = require('./state');
 
 exports.catchErrors = fn => (...params) => {
   try {
@@ -32,6 +32,8 @@ exports.initGroup = async ctx => {
 
   state.groups[groupKey] = { totalMembers, members: [] };
   console.log(`Inicializado nuevo grupo con id ${chatId} y ${totalMembers} usuarios`);
+
+  saveState();
   ctx.reply('El grupo ha sido inicializado');
 }
 
@@ -68,6 +70,8 @@ exports.messageHandler = ctx => {
 
   state.groups[groupKey].members.push(username);
   console.log(`El usuario ${username} ha sido añadido al chat ${chatId}`);
+
+  saveState();
 }
 
 exports.mentionAllHandler = (ctx) => {
