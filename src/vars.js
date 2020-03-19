@@ -8,8 +8,10 @@ require('dotenv-safe').config({
 const { BOT_TOKEN } = process.env;
 
 const SAVE_FILE = join(__dirname, '..', 'saved_data.json');
+const COMMAND_ALL = 'all';
 
 module.exports = {
   BOT_TOKEN,
   SAVE_FILE,
+  COMMAND_ALL,
 };

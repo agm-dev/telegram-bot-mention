@@ -1,6 +1,6 @@
 const Telegraf = require('telegraf');
 
-const { BOT_TOKEN } = require('./vars');
+const { BOT_TOKEN, COMMAND_ALL } = require('./vars');
 const {
   catchErrors,
   initGroup,
@@ -11,7 +11,7 @@ const {
 const bot = new Telegraf(BOT_TOKEN);
 
 bot.start(catchErrors(initGroup));
-bot.command('all', catchErrors(mentionAllHandler));
+bot.command(COMMAND_ALL, catchErrors(mentionAllHandler));
 bot.on('message', catchErrors(messageHandler));
 
 module.exports = bot;

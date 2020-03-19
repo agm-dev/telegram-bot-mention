@@ -6,12 +6,13 @@ exports.log = {
 }
 
 exports.getVarsFromContext = ctx => {
-  const { chat, from } = ctx;
+  const { chat, from, message } = ctx;
   return {
     chatId: chat.id,
     type: chat.type,
     userId: from.id,
     username: from.username,
+    message: message.text,
   };
 }
 
@@ -24,3 +25,7 @@ exports.existsGroupSavedData = (key, state) => typeof state.groups[key] !== 'und
 exports.stillNoSavedMembers = (key, state) => !state.groups[key].members.length
 
 exports.getGroupData = (key, state) => state.groups[key];
+
+exports.getUserText = (command, text) => text
+  .replace(new RegExp(`\/${command}`, 'img'), '')
+  .trim()

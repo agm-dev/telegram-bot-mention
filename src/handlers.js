@@ -5,9 +5,11 @@ const {
   existsGroupSavedData,
   stillNoSavedMembers,
   getGroupData,
+  getUserText,
 } = require('./utils');
 const { state, saveState } = require('./state');
 const { log } = require('./utils');
+const { COMMAND_ALL } = require('./vars');
 
 exports.catchErrors = fn => (...params) => {
   try {
@@ -76,7 +78,8 @@ exports.messageHandler = ctx => {
 }
 
 exports.mentionAllHandler = (ctx) => {
-  const { chatId, type } = getVarsFromContext(ctx);
+  const { chatId, type, message } = getVarsFromContext(ctx);
+
   const groupKey = getGroupId(chatId);
   log.info('mentionAllHandler()', chatId);
 
@@ -105,5 +108,5 @@ exports.mentionAllHandler = (ctx) => {
     .map(m => `@${m}`)
     .join(' ');
 
-  ctx.reply(`Habéis sido convocados! ${msg}`);
+  ctx.reply(`${getUserText(COMMAND_ALL, message)} ${msg}`);
 }
